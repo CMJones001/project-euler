@@ -1,0 +1,6 @@
+/target
+.direnv
+.idea
+target
+debug
+**/*.rs.bk
