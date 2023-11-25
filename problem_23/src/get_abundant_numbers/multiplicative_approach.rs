@@ -1,13 +1,8 @@
+use crate::get_abundant_numbers::get_sum_type;
 /// We make use of the fact that the product of an abundant number is also abundant
 /// The product of a perfect number is abundant (except the perfect number itself)
 /// This allows us to reduce the number of numbers we need to check
-///
-#[derive(PartialEq, Debug, Copy, Clone)]
-pub enum SumType {
-    Abundant,
-    Perfect,
-    Deficient,
-}
+use crate::get_abundant_numbers::SumType;
 
 /// Generate a vector of abundant numbers up to max_val
 pub fn collect_abundant_numbers(max_val: u64) -> Vec<u64> {
@@ -29,37 +24,41 @@ pub fn collect_abundant_numbers(max_val: u64) -> Vec<u64> {
 /// For an index i, the value at i is the SumType for i
 /// This is poorly defined for i = 0, so we just give it a value
 pub fn classify_numbers(max_val: usize) -> Vec<SumType> {
-    let mut numbers: Vec<Option<SumType>> = vec![None; max_val + 1];
+    // This approach isn't as performant as expected, with the single threaded brute force
+    // approach being only 2-3x slower than this approach.
+    //
+    // Possibly, this is due to the fact that we only remove a small fraction of numbers
+    // from the list of numbers to check, and the overhead of branching is too high.
+
+    let mut numbers: Vec<SumType> = vec![SumType::Deficient; max_val + 1];
 
     for num in 1..=max_val {
         let selection = numbers[num];
 
-        if selection.is_some() {
+        if selection != SumType::Deficient {
             continue;
         }
 
-        let num_type = crate::get_sum_type(num as u64);
+        let num_type = get_sum_type(num as u64);
         match num_type {
             SumType::Abundant => {
                 for x in (num..=max_val).step_by(num) {
-                    numbers[x] = Some(SumType::Abundant)
+                    numbers[x] = SumType::Abundant
                 }
             }
             SumType::Perfect => {
-                numbers[num] = Some(SumType::Perfect);
+                numbers[num] = SumType::Perfect;
                 for x in ((num * 2)..=max_val).step_by(num) {
-                    numbers[x] = Some(SumType::Abundant)
+                    numbers[x] = SumType::Abundant
                 }
             }
-            SumType::Deficient => numbers[num] = Some(SumType::Deficient),
+            SumType::Deficient => {}
         }
     }
 
     // Convenient to have 0 in the array, so give some arbitrary value
-    numbers[0] = Some(SumType::Deficient);
-
-    let numbers: Option<Vec<_>> = numbers.into_iter().collect();
-    numbers.unwrap()
+    numbers[0] = SumType::Deficient;
+    numbers
 }
 
 #[cfg(test)]
