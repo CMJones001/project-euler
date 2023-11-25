@@ -29,6 +29,7 @@
       devShells.default = mkShell {
         inherit nativeBuildInputs;
         buildInputs = [ 
+          gnuplot
           rust-bin.stable.latest.default 
           eza fd bacon
           cargo
