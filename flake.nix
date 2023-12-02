@@ -33,7 +33,10 @@
           rust-bin.stable.latest.default 
           eza fd bacon
           cargo
+          (jetbrains.plugins.addPlugins jetbrains.pycharm-professional ["github-copilot" "ideavim"])
           (jetbrains.plugins.addPlugins jetbrains.rust-rover [ "github-copilot" "ideavim" ])
+          (python311.withPackages(ps: with ps; [wheel numpy pandas matplotlib seaborn]))
+          black
           clippy
         ];
         inputsFrom = [ pkgs.neovim pkgs.zsh ];
