@@ -25,3 +25,10 @@ to be divisible by 3. This applies to all digits except the left-most digit.
 
 In the right-most position we can only have the primes 3, 7. 5 and 2 cannot be in this position as these cannot be the 
 right-most digit in multi-digit primes. 
+
+# Conclusion
+
+This careful generation of the candidate lists means that we only have to check primality of ~280 candidates, to 
+include the all the values up to 1e7!
+
+Hard coding the primes could be faster, but feels like cheating.
