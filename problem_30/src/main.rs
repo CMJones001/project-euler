@@ -4,18 +4,18 @@ use std::time::Instant;
 fn main() {
     let now = Instant::now();
     let power_val = power_approach();
-    println!("Time taken: {}ms", now.elapsed().as_millis());
+    println!("Time taken: {} µs", now.elapsed().as_micros());
     println!("Power approach: {}", power_val);
 
     // Brute force approach
     let now = Instant::now();
     let bf_val = brute_force_approach(5);
-    println!("Time taken: {}ms", now.elapsed().as_millis());
+    println!("Time taken: {} µs", now.elapsed().as_micros());
     println!("Brute force approach: {}", bf_val);
 
     let now = Instant::now();
     let explicit_val = explicit_powers();
-    println!("Time taken: {}ms", now.elapsed().as_millis());
+    println!("Time taken: {} µs", now.elapsed().as_micros());
     println!("Explicit approach: {}", explicit_val);
 }
 
@@ -54,37 +54,31 @@ fn explicit_powers() -> u32 {
     // Manually unrolled loops
     //
     // Far faster than the other approaches, but I still hate it
+    // Oddly enough, continuing early if the sub total is greater than some sum seems to
+    // slow things down
     let digit_powers = (0..10).map(|x: u32| (x, x.pow(5))).collect::<Vec<_>>();
     let mut matches = 0;
-    let max_val = 400000;
 
     for (num_a, pow_a) in digit_powers.iter() {
+        let digit_a = num_a * 100_000;
         for (num_b, pow_b) in digit_powers.iter() {
+            let digit_b = digit_a + num_b * 10_000;
             for (num_c, pow_c) in digit_powers.iter() {
+                let digit_c = digit_b + num_c * 1_000;
                 for (num_d, pow_d) in digit_powers.iter() {
-                    let abcd = pow_a + pow_b + pow_c + pow_d;
-                    if abcd > max_val {
-                        continue;
-                    }
-                    for (num_e, pow_e) in digit_powers.iter() {
-                        let abcde = abcd + pow_e;
-                        if abcde > max_val {
-                            continue;
-                        }
-                        for (num_f, pow_f) in digit_powers.iter() {
-                            let abcdef = abcde + pow_f;
-                            if abcdef > max_val {
-                                continue;
-                            }
+                    let digit_d = digit_c + num_d * 100;
+                    let power_d = pow_a + pow_b + pow_c + pow_d;
 
-                            let number = num_a * 100000
-                                + num_b * 10000
-                                + num_c * 1000
-                                + num_d * 100
-                                + num_e * 10
-                                + num_f;
-                            if number == abcdef {
-                                matches += number;
+                    for (num_e, pow_e) in digit_powers.iter() {
+                        let digit_e= digit_d + num_e * 10;
+                        let power_e = power_d + pow_e;
+
+                        for (num_f, pow_f) in digit_powers.iter() {
+                            let power = power_e + pow_f;
+                            let digit = digit_e + num_f;
+
+                            if digit == power {
+                                matches += digit;
                             }
                         }
                     }
