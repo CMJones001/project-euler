@@ -2,7 +2,7 @@
   description = "An example of a development flake using rust";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable"; 
+    nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable"; 
     flake-utils.url = "github:numtide/flake-utils";
     rust-overlay = {
       url = "github:oxalica/rust-overlay";
@@ -35,9 +35,10 @@
           cargo
           (jetbrains.plugins.addPlugins jetbrains.pycharm-professional ["github-copilot" "ideavim"])
           (jetbrains.plugins.addPlugins jetbrains.rust-rover [ "github-copilot" "ideavim" ])
-          (python311.withPackages(ps: with ps; [wheel numpy pandas matplotlib seaborn]))
+          (python311.withPackages(ps: with ps; [wheel numpy pandas matplotlib seaborn sympy jedi-language-server]))
           black
           clippy
+          typst typstfmt typst-lsp
         ];
         inputsFrom = [ pkgs.neovim pkgs.zsh ];
         shellHook = ''
