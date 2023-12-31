@@ -364,6 +364,10 @@ name = "problem_44"
 version = "0.1.0"
 
 [[package]]
+name = "problem_45"
+version = "0.1.0"
+
+[[package]]
 name = "proc-macro2"
 version = "1.0.69"
 source = "registry+https://github.com/rust-lang/crates.io-index"
