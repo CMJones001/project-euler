@@ -10,6 +10,7 @@ edition = "2021"
 [workspace]
 members = [
   "common",
+  "problem_14",
   "problem_23",
   "problem_29",
   "problem_30",
@@ -22,4 +23,6 @@ members = [
   "problem_48",
   "problem_49",
   "problem_50",
+  "problem_62",
+  "problem_69",
 ]
